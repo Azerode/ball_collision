@@ -21,7 +21,7 @@ extern ball objects[MAX_OBJECT];
 
 float distance(Vector2 *v_a, Vector2 *v_b);
 
-void applyVelocity(ball *obj);
+void applyVelocity(ball *obj, float delat_time);
 
 void calcElacticCollision(ball *obj1, ball *obj2);
 

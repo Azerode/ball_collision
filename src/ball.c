@@ -13,9 +13,9 @@ static float calcVelocityB(float mass_a, float mass_b, float v_a, float v_b) {
   return ((2 * mass_a) / sum_mass) * v_a + ((mass_b - mass_a) / sum_mass) * v_b;
 }
 
-void applyVelocity(ball *obj) {
-  obj->position.x += obj->velocity.x;
-  obj->position.y += obj->velocity.y;
+void applyVelocity(ball *obj, float delta_time) {
+  obj->position.x += obj->velocity.x * delta_time;
+  obj->position.y += obj->velocity.y * delta_time;
 }
 
 float distance(Vector2 *v_a, Vector2 *v_b) {

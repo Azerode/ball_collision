@@ -21,9 +21,9 @@ void generate_balls(){
 
         objects[i].position.x = GetRandomValue(0, WIDTH - r);
         objects[i].position.y = GetRandomValue(0, HEIGHT - r);
-        objects[i].velocity.x = GetRandomValue(-2, 2);
-        objects[i].velocity.y = GetRandomValue(-2, 2);
-        objects[i].mass = GetRandomValue(1, 10);
+        objects[i].velocity.x = GetRandomValue(-100, 100);
+        objects[i].velocity.y = GetRandomValue(-100, 100);
+        objects[i].mass = GetRandomValue(1, 10) * r;
         objects[i].r = r;
         objects[i].color = (Color) {red,green,blue,255};
     }
@@ -36,10 +36,10 @@ void DrawObject(){
     }
 }
 
-void apply_movement(){
+void apply_movement(float delta_time){
     for(size_t i = 0; i < MAX_OBJECT; i++){
         ball *obj = &objects[i];
-        applyVelocity(obj);
+        applyVelocity(obj,delta_time);
     } 
 }
 
@@ -55,20 +55,22 @@ void check_edge(ball *obj){
 
 void ApplyCollision(){
     for (int i = 0 ; i < MAX_OBJECT; i++){
-        ball *obj_a = &objects[i];
-        check_edge(obj_a);
+        ball * a = &objects[i];
+        check_edge(a);
         for(int j = i + 1; j < MAX_OBJECT; j++){
-            ball *obj_b = &objects[j];
+            ball * b = &objects[j];
 
-            if (CheckCollisionCircles(obj_a->position, obj_a->r,obj_b->position,obj_b->r))
+            if (CheckCollisionCircles(a->position, a->r,b->position,b->r))
             {
-                calcElacticCollision(obj_a,obj_b);
+                calcElacticCollision(a,b); 
             }
         }
     }
 }
 
 int main(){
+
+    float delta_time;
 
     generate_balls();
 
@@ -77,8 +79,9 @@ int main(){
 
     while (!WindowShouldClose())
     {
+        delta_time = GetFrameTime();
         ApplyCollision();
-        apply_movement();
+        apply_movement(delta_time);
         BeginDrawing();
             DrawFPS(10,10);
             ClearBackground(BLACK);
